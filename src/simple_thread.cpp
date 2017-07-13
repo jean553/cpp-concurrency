@@ -56,4 +56,6 @@ void runSimpleThread() {
 
     firstThread.join();
     secondThread.join();
+
+    std::cout << "finished" << std::endl;
 }
