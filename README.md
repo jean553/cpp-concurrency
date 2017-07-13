@@ -104,3 +104,17 @@ The "memory space" management/organization depends of the OS implementation,
 but it's usually a space owned by one process (and many threads if the process is multithreaded).
 
 ![Image 1](images/threads_concurrency.png)
+
+#### Basic concurrency with threads
+
+The following code (in `simple_thread`) starts two threads,
+and waits for each one to finish.
+
+```cpp
+std::thread firstThread(procedureToRun);
+
+std::thread secondThread(procedureToRun);
+
+firstThread.join();
+secondThread.join();
+```
