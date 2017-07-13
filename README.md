@@ -91,3 +91,16 @@ The command below adds `-lthread ...` to the compilation command.
 ```cmake
 target_link_libraries(cpp-concurrency ${CMAKE_THREAD_LIBS_INIT})
 ```
+
+## Concurrency theory
+
+### Threads
+
+Threads are independent sequences of execution.
+Threads are started by processes and run into the same memory space.
+Processes run in different memory spaces.
+
+The "memory space" management/organization depends of the OS implementation,
+but it's usually a space owned by one process (and many threads if the process is multithreaded).
+
+![Image 1](images/threads_concurrency.png)
