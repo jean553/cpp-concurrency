@@ -1,10 +1,11 @@
 #include "simple_thread.hpp"
+#include "simple_task.hpp"
 
 #include <iostream>
 
 int main()
 {
-    runSimpleThread();
+    runSimpleTask();
 
     return EXIT_SUCCESS;
 }
