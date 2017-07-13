@@ -1,0 +1,93 @@
+# cpp-concurrency
+
+Basic concurrency code snippets in C++.
+
+## Compilation
+
+```
+mkdir build && cd build/
+cmake ..
+make
+```
+
+## Execution
+
+```
+./bin/cpp-concurrency
+```
+
+## CMake
+
+The current CMake script supports CMake 2.8 and higher.
+
+```cmake
+cmake_minimum_required(VERSION 2.8)
+```
+
+Set the name of the project.
+
+```cmake
+project(cpp-concurrency)
+```
+
+Find the `Threads` package.
+This is the `module` mode of CMake to find a package:
+if the `findThreads.cmake` file is found, its content is executed by CMake;
+the `.cmake` file usually contains the whole procedure to find and use external libraries
+into the current project. They provide dependency information for the target.
+They also perform all the preliminary checks indicating the library is correctly
+installed on the current system and can be used as well.
+
+```cmake
+find_package(Threads)
+```
+
+Set the output path of the generated binary.
+
+```cmake
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+```
+
+The generated executable is not optimized for debug.
+
+```cmake
+set(CMAKE_BUILD_TYPE Release)
+```
+
+We compile using C++14, and we display all the warnings.
+
+```cmake
+add_compile_options(-std=c++14 -Wall)
+```
+
+Create a set of all the sources files.
+
+```cmake
+file(
+    GLOB
+    sources
+    src/*
+)
+```
+
+Integrate the includes files directory.
+
+```cmake
+include_directories(includes)
+```
+
+Specify the executable name after compilation.
+
+```cmake
+add_executable(
+    cpp-concurrency
+    ${sources}
+)
+```
+
+The libraries of the `Threads` package are used during the linking process.
+The command below adds `-lthread ...` to the compilation command.
+
+```cmake
+target_link_libraries(cpp-concurrency ${CMAKE_THREAD_LIBS_INIT})
+```
