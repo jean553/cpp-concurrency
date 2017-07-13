@@ -8,11 +8,14 @@
 /**
  *
  */
-void displayNumbersUntilTen() {
+void displayFromTo(
+    const unsigned short& start,
+    const unsigned short& end
+) {
 
     for(
-        auto i = 0;
-        i < 10;
+        auto i = start;
+        i < end;
         i += 1
     ) {
         std::cout << i << std::endl;
@@ -24,6 +27,14 @@ void displayNumbersUntilTen() {
  */
 void runSimpleThread() {
 
-    std::thread thread(displayNumbersUntilTen);
+    constexpr unsigned short FIRST_THREAD_START {0};
+    constexpr unsigned short FIRST_THREAD_END {100};
+
+    std::thread thread(
+        displayFromTo,
+        FIRST_THREAD_START,
+        FIRST_THREAD_END
+    );
+
     thread.join();
 }
