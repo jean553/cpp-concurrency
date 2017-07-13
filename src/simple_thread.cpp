@@ -1,5 +1,5 @@
 /**
- * @brief simple function executed as a thread
+ * @brief thread usage example
  */
 
 #include <iostream>
