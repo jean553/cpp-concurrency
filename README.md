@@ -184,3 +184,9 @@ in order to be executed by the hardware threads/processors.
 When a hardware thread or a processor has nothing to do,
 it checks the instructions queue of the other threads and
 "steals" them to put them into its own queue.
+
+### Check threads(s) amount of a running process
+
+```bash
+ps -e -T | grep cpp-concurrency
+```
