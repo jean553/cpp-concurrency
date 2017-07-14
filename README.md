@@ -169,3 +169,13 @@ must be refreshed in order to execute the new given thread).
 
 `std::async` is a solution to this problem, as it may execute
 the given function without any new thread creation.
+
+#### Work stealing
+
+Work stealing algorithms are used in multi-threading environments.
+
+When threads are created, their instructions are put inside a queue,
+in order to be executed by the hardware threads/processors.
+When a hardware thread or a processor has nothing to do,
+it checks the instructions queue of the other threads and
+"steals" them to put them into its own queue.
