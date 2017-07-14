@@ -185,6 +185,36 @@ When a hardware thread or a processor has nothing to do,
 it checks the instructions queue of the other threads and
 "steals" them to put them into its own queue.
 
+#### `std::launch::async` vs `std::launch::deferred`
+
+Instead of using `std::async`, we can use one of the two following functions:
+ * `std::launch::async` passed method is executed asynchronously, into a different thread,
+ * `std::launch::deferred` passed method is executed synchronously at the `get` or `wait` method invocation;
+if no one of these two methods is called by the future object, the passed method is never executed.
+
+If `std::async` is simply called, one of the two method above is applied. It could be a synchronous or
+an asynchronous call. The `std::async` method will judge by itself which execution way is better
+according to the current execution (oversubscription, work stealing, CPU...).
+
+```cpp
+
+/* function is executed asynchronously in a new thread */
+auto future = std::async(
+    std::launch::async,
+    function
+);
+
+/* function is executed synchronously into the same thread when calling wait() */
+auto future = std::async(
+    std::launch::deferred,
+    function
+);
+
+/* function is executed synchronously OR asynchronously */
+auto future = std::async(function);
+
+```
+
 ### Check threads(s) amount of a running process
 
 ```bash
