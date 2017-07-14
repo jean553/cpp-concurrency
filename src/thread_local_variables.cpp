@@ -40,12 +40,14 @@ void runFunctionWithThreadLocal() {
 
     constexpr unsigned short FIRST_TASK_SLEEP_TIME {500};
     auto firstFuture = std::async(
+        std::launch::async,
         threadFunction,
         FIRST_TASK_SLEEP_TIME
     );
 
     constexpr unsigned short SECOND_TASK_SLEEP_TIME {1000};
     auto secondFuture = std::async(
+        std::launch::async,
         threadFunction,
         SECOND_TASK_SLEEP_TIME
     );
