@@ -105,7 +105,7 @@ but it's usually a space owned by one process (and many threads if the process i
 
 ![Image 1](images/threads_concurrency.png)
 
-### Hardware threads vs Software threads
+#### Hardware threads vs Software threads
 
 Hardware threads are a feature of the processor. This is the entity that really makes calculations.
 The amount of hardware threads is fixed and depends of the CPU.
@@ -129,4 +129,26 @@ std::thread secondThread(procedureToRun);
 
 firstThread.join();
 secondThread.join();
+```
+
+### Tasks
+
+#### Simple tasks usage
+
+An example of this feature can be found into `simple_task`.
+
+A task is a function passed to `std::async`.
+By using this function, a thread "might" be created to execute the passed function.
+The standard library analyzes by itself if the creation of a new thread
+is really necessary for the method (according to the processor hardware threads,
+the CPU caches, the CPU specificities...). In some cases, the `std::async` method
+will simply execute the given function in the same thread that asks for the task
+result (`get` function).
+
+```cpp
+std::future<int> task = std::async(asynchronousFunction);
+
+/* a lot of code */
+
+auto result = task.get();
 ```
