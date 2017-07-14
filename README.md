@@ -215,6 +215,26 @@ auto future = std::async(function);
 
 ```
 
+There are common pitfalls with the simple `std::async` usage.
+Here a simple example:
+
+```cpp
+/* if future is created with std::launch::deferred,
+   the program does not create a new variable */
+thread_local int value {5};
+
+auto future = std::async(function);
+
+if (future.wait_for(std::chrono::microseconds(500)) == std::future_status::ready) {
+
+    /* if future is created with std::launch::deferred,
+       then this code is never executed as the future
+       is not ready */
+}
+
+future.wait();
+```
+
 ### `thread_local` variables
 
 A variable declared with `thread_local` indicates that the given
