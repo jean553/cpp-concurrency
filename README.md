@@ -105,6 +105,18 @@ but it's usually a space owned by one process (and many threads if the process i
 
 ![Image 1](images/threads_concurrency.png)
 
+### Hardware threads vs Software threads
+
+Hardware threads are a feature of the processor. This is the entity that really makes calculations.
+The amount of hardware threads is fixed and depends of the CPU.
+
+Software threads are started by processes/OS, and managed by the OS.
+They are sent to the hardware threads for execution.
+Usually, if a software thread is blocking (waiting for an IO),
+a hardware thread is able to take another software thread and executes it.
+
+![Image 2](images/hardware_and_software_threads.png)
+
 #### Basic concurrency with threads
 
 The following code (in `simple_thread`) starts two threads,
