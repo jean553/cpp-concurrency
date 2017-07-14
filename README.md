@@ -152,3 +152,20 @@ std::future<int> task = std::async(asynchronousFunction);
 
 auto result = task.get();
 ```
+
+#### Oversubscription problem
+
+This is a very common multi-threading problem.
+This problem occures when the amount of available hardware threads
+is lesser than the amount of non-blocking software threads,
+ready to be executed.
+
+The operation system allows each software thread to be executed
+for a given time. When the time is over, another software thread
+is executed by a hardware thread.
+
+Every software switch is a `context switch` (the CPU hardware thread
+must be refreshed in order to execute the new given thread).
+
+`std::async` is a solution to this problem, as it may execute
+the given function without any new thread creation.
