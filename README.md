@@ -215,6 +215,30 @@ auto future = std::async(function);
 
 ```
 
+### `thread_local` variables
+
+A variable declared with `thread_local` indicates that the given
+variable is created for every new created thread.
+
+```cpp
+thread_local unsigned short copied_value {10};
+unsigned short shared_value {10};
+
+void threadFunction() {
+
+    /* shared_value is equal to the last value that has been set by a thread */
+    /* copied_value is guarantee to be equal to 10 */
+
+    copied_value += 1;
+    shared_value += 1;
+}
+
+auto future = std::async(
+    std::launch::async,
+    threadFunction
+);
+```
+
 ### Check threads(s) amount of a running process
 
 ```bash
