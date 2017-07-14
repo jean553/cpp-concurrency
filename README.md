@@ -131,6 +131,11 @@ firstThread.join();
 secondThread.join();
 ```
 
+Unlike `std::async` tasks, it is not possible to return values from `std::thread` functions.
+If a `std::thread` function throws an exception, the program stops.
+When using `std::thread`, there is no automatic management for the repartition and
+oversubscription problems.
+
 ### Tasks
 
 #### Simple tasks usage
