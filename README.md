@@ -220,6 +220,8 @@ auto future = std::async(function);
 A variable declared with `thread_local` indicates that the given
 variable is created for every new created thread.
 
+An example can be found in `thread_local_variables`.
+
 ```cpp
 thread_local unsigned short copied_value {10};
 unsigned short shared_value {10};
