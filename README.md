@@ -380,6 +380,47 @@ auto future = std::async(
 );
 ```
 
+### `std::mutex` and `std::lock_guard`
+
+Usage example can be found in `mutex`.
+
+A mutex is used to ensure that one thread does not manipulate shared resources while another
+thread is already manipulating them. A shared resource is shared between all threads.
+
+```cpp
+void task(
+    const std::string& key,
+    const unsigned short& data,
+    std::mutex& mutex,
+    std::map<std::string, unsigned short>& container
+) {
+    std::lock_guard<std::mutex> guard(mutex); // seg fault without this line
+    container[key] = data;
+}
+
+std::mutex mutex;
+std::map<std::string, unsigned short> container;
+
+constexpr unsigned short FIRST_DATA {10};
+std::thread(
+    task,
+    "first_key",
+    FIRST_DATA,
+    std::ref(mutex),
+    std::ref(container)
+);
+
+constexpr unsigned short SECOND_DATA {100};
+std::thread(
+    task,
+    "second_key",
+    SECOND_DATA,
+    std::ref(mutex),
+    std::ref(container)
+);
+
+```
+
 ### Check threads(s) amount of a running process
 
 ```bash
