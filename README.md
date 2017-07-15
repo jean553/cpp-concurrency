@@ -497,6 +497,12 @@ They both do the same thing (take a mutex and lock it).
 They provide more features than `std::lock_guard` (like RAII construction)
 but are more expensive to use.
 
+#### `std::shared_future` vs `std::future`
+
+Call the function `get` on `std::future` moves the object from the shared state to the new address.
+
+Call the function `get` on `std::shared_future` copies the object from the shared state to the new address.
+
 ### Check threads(s) amount of a running process
 
 ```bash
