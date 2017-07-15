@@ -136,6 +136,27 @@ If a `std::thread` function throws an exception, the program stops.
 When using `std::thread`, there is no automatic management for the repartition and
 oversubscription problems.
 
+#### `join` vs `detach`
+
+Example can be found in `join_vs_detach`.
+
+When using the `join` method, the program waits for the given thread to be terminated.
+
+```cpp
+std::thread t(method);
+
+t.join(); // waits here until t is finished
+```
+
+When using the `detach` method, the program does not wait for the thread to be finished.
+The program can be terminated before the thread finishes.
+
+```cpp
+std::thread t(method);
+
+t.detach(); // both of the program and the thread continue their execution
+```
+
 ### Tasks
 
 #### Simple tasks usage
