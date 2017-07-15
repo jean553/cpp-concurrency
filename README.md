@@ -301,6 +301,59 @@ if (future.wait_for(std::chrono::microseconds(500)) == std::future_status::ready
 future.wait();
 ```
 
+#### Thread destruction
+
+The way a thread is destroyed depends on its creation.
+
+There are two way to destroy a thread:
+ * blocking until the end of the thread (the destructor blocks),
+ * terminates the thread immediately
+
+The destructor of a thread blocks if:
+ * the thread has been started with `std::async`,
+ * the thread is not deffered
+
+```cpp
+{
+    auto future = std::async(
+        std::launch::async,
+        function
+    );
+
+    /* wait for the thread to be finished */
+}
+```
+
+Sometimes, there is no guarantee the destructor will wait or not:
+
+```cpp
+{
+    auto future = std::async(function);
+
+    /* may wait or not, depends how the thread has been started */
+}
+```
+
+A classic walk-around is to declare an asynchronous task with `packaged_task`.
+
+`std::packaged_task` executes any task and stores its result into a shared state
+that can be read by one or many futures, instead of `std::future` that directly has
+the returned value.
+
+```cpp
+{
+    std::packaged_task<int()> task(function);
+
+    auto future = task.get_future();
+
+    std::thread thread(task);
+
+    /* the thread destructor will never wait;
+       the destruction process will be the same
+       as if we had simply declared std::thread  */
+}
+```
+
 ### `thread_local` variables
 
 A variable declared with `thread_local` indicates that the given
