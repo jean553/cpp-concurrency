@@ -157,6 +157,51 @@ std::thread t(method);
 t.detach(); // both of the program and the thread continue their execution
 ```
 
+#### RAII Threads
+
+Example in `raii_thread`.
+
+In order to be sure that the thread is correctly finished, one solution is to wrap it into a RAII class.
+
+```cpp
+class RAIIThread {
+
+public:
+
+    enum class ThreadAction {
+        Join, /** < call join() to finish the thread */
+        Detach /** < call detach() to finish the thread */
+    };
+
+    RAIIThread(
+        const ThreadAction& action,
+        std::thread&& thread
+    ) :
+        action(action),
+        thread(std::move(thread))
+    {
+    }
+
+    ~RAIIThread() {
+
+        if (not thread.joinable()) {
+            return;
+        }
+
+        if (action == ThreadAction::Join) {
+            thread.join();
+        } else {
+            thread.detach();
+        }
+    }
+
+private:
+
+    ThreadAction action;
+    std::thread thread;
+};
+```
+
 ### Tasks
 
 #### Simple tasks usage
