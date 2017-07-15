@@ -421,6 +421,82 @@ std::thread(
 
 ```
 
+### Condition variables (`std::condition_variable`)
+
+An example can be found in `condition_variable`.
+
+A condition variable is used to notify one or many threads from one thread.
+
+#### How to use them ?
+
+```cpp
+
+void firstThreadFunction(
+    std::condition_variable& cv,
+    std::mutex& mutex
+) {
+
+    /* execute some code... */
+
+    cv.notify_one(); // the second thread is notified
+
+    /* execute some code... */
+}
+
+void secondThreadFunction(
+    std::condition_variable& cv,
+    std::mutex& mutex
+) {
+
+    /* execute some code */
+
+    std::unique_lock<std::mutex> lock(mutex);
+    cv.wait(lock); // wait until the notification from the first thread
+
+    /* execute some code... */
+}
+
+int main() {
+
+    std::condition_variable cv;
+    std::mutex mutex;
+
+    std::thread firstThread(
+        firstThreadFunction,
+        std::ref(cv),
+        std::ref(mutex)
+    );
+
+    std::thread secondThread(
+        secondThreadFunction,
+        std::ref(cv),
+        std::ref(mutex)
+    );
+
+    firstThread.join();
+    secondThread.join();
+}
+
+```
+
+Even if this code is operational, it has some weaknesses:
+ * the second thread may indefinitely wait if the first thread sends the notification
+before the second thread executes the wait method,
+ * the wait() method fails to account for spurious wakeups (automatic weakups
+from the processor, often from the implementation for safety reasons)
+The wait() method should use its lambda to check if the wakeup really comes from the other thread.
+
+#### `std::lock_guard` vs `std::unique_lock`
+
+They both do the same thing (take a mutex and lock it).
+
+`std::lock_guard` cannot unlock the mutex until the end of the block
+(destruction of the object).
+
+`std::unique_lock` can be locked and unlocked during the execution.
+They provide more features than `std::lock_guard` (like RAII construction)
+but are more expensive to use.
+
 ### Check threads(s) amount of a running process
 
 ```bash
