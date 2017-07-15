@@ -2,6 +2,8 @@
  * @brief join and detach usage example
  */
 
+#include "join_vs_detach.hpp"
+
 #include <thread>
 #include <iostream>
 
@@ -30,7 +32,7 @@ void runIntoThread(
 /**
  *
  */
-void executeThreadWithJoin() {
+void executeThreadsWithJoinAndDetach() {
 
     constexpr unsigned short FIRST_THREAD_ID {1};
     constexpr unsigned short FIRST_THREAD_SLEEP_TIME {500};
