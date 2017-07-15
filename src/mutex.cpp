@@ -21,7 +21,7 @@ void saveContent(
         std::chrono::milliseconds(LONG_ACTION_TIME)
     );
 
-    std::lock_guard<std::mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mutex); // seg fault without this line
     container[key] = data;
 }
 
