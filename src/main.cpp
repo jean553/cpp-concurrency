@@ -3,12 +3,13 @@
 #include "thread_local_variables.hpp"
 #include "join_vs_detach.hpp"
 #include "raii_thread.hpp"
+#include "mutex.hpp"
 
 #include <iostream>
 
 int main()
 {
-    runRAIIThread();
+    functionThatNeedsMutex();
 
     return EXIT_SUCCESS;
 }
