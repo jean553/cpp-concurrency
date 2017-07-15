@@ -4,12 +4,13 @@
 #include "join_vs_detach.hpp"
 #include "raii_thread.hpp"
 #include "mutex.hpp"
+#include "condition_variable.hpp"
 
 #include <iostream>
 
 int main()
 {
-    functionThatNeedsMutex();
+    functionWithConditionVariable();
 
     return EXIT_SUCCESS;
 }
