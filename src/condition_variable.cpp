@@ -5,15 +5,19 @@
 #include "condition_variable.hpp"
 
 #include <thread>
-#include <chrono>
 #include <iostream>
 
 /**
  *
  */
-void firstThreadFunction(std::condition_variable& cv) {
+void firstThreadFunction(
+    std::condition_variable& cv,
+    std::mutex& mutex
+) {
 
-    constexpr unsigned short SLEEP_TIME {3000};
+    std::cout << "first thread started" << std::endl;
+
+    constexpr unsigned short SLEEP_TIME {5000};
     std::this_thread::sleep_for(
         std::chrono::milliseconds(SLEEP_TIME)
     );
@@ -34,14 +38,38 @@ void firstThreadFunction(std::condition_variable& cv) {
 /**
  *
  */
+void secondThreadFunction(
+    std::condition_variable& cv,
+    std::mutex& mutex
+) {
+    std::cout << "second thread started" << std::endl;
+
+    std::unique_lock<std::mutex> lock(mutex);
+    cv.wait(lock);
+
+    std::cout << "terminate second thread" << std::endl;
+}
+
+/**
+ *
+ */
 void functionWithConditionVariable() {
 
     std::condition_variable cv;
+    std::mutex mutex;
 
     std::thread firstThread(
         firstThreadFunction,
-        std::ref(cv)
+        std::ref(cv),
+        std::ref(mutex)
+    );
+
+    std::thread secondThread(
+        secondThreadFunction,
+        std::ref(cv),
+        std::ref(mutex)
     );
 
     firstThread.join();
+    secondThread.join();
 }
