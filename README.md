@@ -545,6 +545,34 @@ is one and unique action. A thread won't be able to read `value` until the numbe
 Furthermore, using `std::atomic<int>`, there is a guarantee that the instructions `value += 20` and `value -= 15`
 will be executed in the specified order. This is not guarantee when we simply declare `int`.
 
+### `volatile`
+
+`volatile` variables are not optimized by the compiler.
+
+For example, when we write this:
+
+```cpp
+int value {5};
+value = 10;
+```
+
+The compiler may directly understand the instruction `int value {10}` instead.
+
+This optimization is not performed when using `volatile`:
+
+```cpp
+volatile int value {5};
+value = 10;
+```
+
+`volatile` is used for variable that contains sensors content, IO content...
+
+The following is also correct:
+
+```cpp
+volatile std::atomic<int> value {10};
+```
+
 ### Check threads(s) amount of a running process
 
 ```bash
