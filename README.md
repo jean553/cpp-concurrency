@@ -503,6 +503,48 @@ Call the function `get` on `std::future` moves the object from the shared state 
 
 Call the function `get` on `std::shared_future` copies the object from the shared state to the new address.
 
+### `std::atomic` usage
+
+`std::atomic` guarantees that operations on a given variable are atomic (from the other threads point of view).
+
+For example:
+
+```cpp
+
+void threadFunction(int& value) { // replaced by std::atomic<int>&
+
+    value += 20;
+
+    value -= 15;
+}
+
+int main() {
+
+    int value {10}; // replaced by std::atomic<int>
+
+    std::thread firstThread(
+        threadFunction,
+        std::ref(value)
+    );
+
+    std::thread secondThread(
+        threadFunction,
+        std::ref(value)
+    );
+}
+
+```
+
+With the code above, there is no guarantee about the final result of `value`.
+In fact, at the line `value += 20`, a read process is performed on value.
+During this read process, the two threads may read simultaneously the value 20 as the action is not atomic.
+
+By replacing `int` by `std::atomic<int>`, we have a guarantee that read and modify `value` at the line `value += 20`
+is one and unique action. A thread won't be able to read `value` until the number `20` is not added to it by another thread.
+
+Furthermore, using `std::atomic<int>`, there is a guarantee that the instructions `value += 20` and `value -= 15`
+will be executed in the specified order. This is not guarantee when we simply declare `int`.
+
 ### Check threads(s) amount of a running process
 
 ```bash
